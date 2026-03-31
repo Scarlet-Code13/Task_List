@@ -3,19 +3,7 @@ const path = require("path");
 
 // GET
 const getTasks = (req, res) => {
-    try {
-        const data = JSON.parse(fs.readFileSync(filePath, "utf-8"));
-
-        res.status(200).json({
-            message: "Tasks obtained successfully",
-            tasks: data
-        });
-    } catch (error) {
-        res.status(500).json({
-            message: "Error reading tasks",
-            error: error.message
-        });
-    }
+    res.send("GET funcionando");
 };
 
 
