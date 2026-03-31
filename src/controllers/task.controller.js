@@ -59,9 +59,30 @@ module.exports = {
 
 // PUT
 const updateTask = (req, res) => {
-    res.send("PUT funcionando");
-};
+    const id = req.params.id;
+    const { title, description } = req.body;
 
+    const data = JSON.parse(fs.readFileSync(filePath, "utf-8"));
+
+    const taskIndex = data.findIndex(task => task.id == id);
+
+    if (taskIndex === -1) {
+        return res.status(404).json({
+            message: "Task not found"
+        });
+    }
+
+    // Actualizar datos
+    data[taskIndex].title = title || data[taskIndex].title;
+    data[taskIndex].description = description || data[taskIndex].description;
+
+    fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
+
+    res.status(200).json({
+        message: "Task updated successfully",
+        task: data[taskIndex]
+    });
+};
 // DELETE
 const deleteTask = (req, res) => {
     res.send("DELETE funcionando");
