@@ -84,9 +84,30 @@ const updateTask = (req, res) => {
     });
 };
 // DELETE
+
 const deleteTask = (req, res) => {
-    res.send("DELETE funcionando");
+    const id = Number(req.params.id); // <-- convertir a número
+
+    try {
+        const tasks = JSON.parse(fs.readFileSync(filePath, "utf-8"));
+
+        const filteredTasks = tasks.filter(task => task.id !== id);
+
+        if (tasks.length === filteredTasks.length) {
+            return res.status(404).json({ message: `Task with id ${id} not found` });
+        }
+
+        fs.writeFileSync(filePath, JSON.stringify(filteredTasks, null, 2));
+
+        res.json({ message: `Task with id ${id} deleted successfully` });
+
+    } catch (error) {
+        res.status(500).json({ message: "Error deleting task", error: error.message });
+    }
 };
+
+
+
 
 module.exports = {
     getTasks,
